@@ -4,20 +4,24 @@ import effects.Bleed;
 import characters.GameCharacter;
 
 public class AnnealBlade extends Sword{
-    protected double bleedProbability;
 
-    public AnnealBlade(){
-        super("Anneal Blade",20, 40);
-        this.bleedProbability = 30;
+    private double bleedProbability;
+
+    public AnnealBlade(double apperanceProbability,int sharpness){
+        super("Anneal Blade",20, apperanceProbability,sharpness);
+        this.bleedProbability = sharpness*0.9;
     }
 
-    @Override
-    public void applyEffectWeapon(GameCharacter attacker, GameCharacter target){
-        if(Math.random() < this.bleedProbability){
-            System.out.println(attacker.getName() + " cuts " + target.getName() + " and now is Bleeding" );
-            target.applyEffect((new Bleed(3,40)));
+    public void applyEffectWeapon(GameCharacter attacker, GameCharacter target) {
+        double currentBleedProb = this.bleedProbability * this.getSharpnessRatio();
+
+        if (this.sharpness > 0 && Math.random() < currentBleedProb) {
+            double bleedPercentage = 0.08 * this.getSharpnessRatio(); // De 8% a 0% según filo
+            System.out.println(this.name + " slices deeply and inflicts Bleed on " + target.getName() + "!");
+            target.applyEffect(new Bleed(3, (int)(bleedPercentage*100)));
         }
-        this.decreaseSharpness(10);
+
+        this.decreaseSharpness(30);
     }
 
     @Override

@@ -6,10 +6,16 @@ public abstract class Weapon {
 
     protected String name;
     protected int baseDamage;
+    protected double apperanceProbability; //entre 0-1
 
-    public Weapon(String name, int baseDamage){
+    public Weapon(String name,int baseDamage,double apperanceProbability){
         this.name = name;
         this.baseDamage = baseDamage;
+        this.apperanceProbability = apperanceProbability;
+    }
+
+    public void castSpellEffect(GameCharacter attacker, GameCharacter target) {
+        System.out.println(this.name + " cannot cast pure spell effects!");
     }
 
     public int getBaseDamage(){return this.baseDamage;}
@@ -21,7 +27,7 @@ public abstract class Weapon {
         return this.name;
     }
 
-    public void applyEffectWeapon(GameCharacter attacker, GameCharacter target){}
+    public void applyWeaponEffect(GameCharacter attacker, GameCharacter target){}
 
     @Override
     public String toString (){

@@ -5,8 +5,8 @@ import weapon.Weapon;
 public class Sword extends Weapon {
 
     int sharpness;
-    public Sword(String name, int baseDamage, int sharpness){
-        super(name, baseDamage);
+    public Sword(String name, int baseDamage,double apperanceProbability, int sharpness){
+        super(name, baseDamage,apperanceProbability);
         this.sharpness = sharpness;
     }
 
@@ -23,14 +23,17 @@ public class Sword extends Weapon {
         return this.sharpness;
     }
 
+    protected double getSharpnessRatio() {return this.sharpness / 100.0;}
+
     @Override
     public int getDamage(){
-        return (this.sharpness < 30) ? (int) (this.baseDamage * 0.8) : this.baseDamage; // si la espada baja de un 30 de sharpness hace menos daño
+        return (this.sharpness < 30) ? (int) (this.baseDamage * 0.8) : this.baseDamage;
+        // si la espada baja de un 30 de sharpness hace menos daño
     }
 
 @Override
     public String toString(){
-        return "Name:" +this.name + "\tDamage:" +this.baseDamage+ "\tSharpness :" + this.sharpness;
+        return "Name:" +this.name + "\tDamage:" +this.baseDamage+ "\tSharpness :" + this.sharpness + "/100";
 }
 
 }

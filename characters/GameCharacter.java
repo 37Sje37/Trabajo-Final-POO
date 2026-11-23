@@ -8,39 +8,45 @@ public abstract class GameCharacter {
 
     protected String name;
     protected int currentHealth;
-    protected int maxHealth;
+    protected int maxHealth = 100;
     protected int baseDamage;
     protected int armour;
     protected boolean canAttack;
-    protected Weapon weapon;
+    protected Weapon equippedWeapon;
     protected Effect currentEffect;
 
-    public GameCharacter(String name, int currentHealth, int damage, int armour, boolean canAttack){
+    public GameCharacter(String name, int currentHealth, int damage, int armour){
         this.name = name;
         this.currentHealth = currentHealth;
         this.baseDamage = damage;
         this.maxHealth = currentHealth;
         this.armour = armour;
         this.canAttack = true;
-        this.weapon = null;
+        this.equippedWeapon = null;
         this.currentEffect = null;
     }
 
-    private void attack(GameCharacter target) {
-        if(!canAttack) {
-            System.out.println(this.name + " can´t attack");
+    public void attack(GameCharacter target) {
+        if (!this.canAttack) {
+            System.out.println(this.name + " cannot attack this turn!");
             return;
         }
 
         int totalDamage = this.baseDamage;
-        if(this.weapon != null){
-            totalDamage += this.weapon.getDamage();
+        if (this.equippedWeapon != null) {
+            totalDamage += this.equippedWeapon.getDamage();
         }
-        System.out.println(this.name + " attacks " + target.name + " doing " + totalDamage + " of damage ");
-        target.setCurrentHealth(totalDamage - (totalDamage/target.getArmour()));
+
+        System.out.println(this.name + " attacks " + target.getName() + " for " + totalDamage + " damage!");
+        target.takeDamage(totalDamage);
+
+        // Fase 2: Probabilidad de activar el efecto especial del arma equipada
+        if (this.equippedWeapon != null) {
+            this.equippedWeapon.applyWeaponEffect(this, target);
+        }
     }
 
-    public void damageIncoming(int damageIncoming){
+    public void takeDamage(int damageIncoming){
         System.out.println("Recives " + damageIncoming + "of damage" );
         this.currentHealth = Math.max(0, this.currentHealth - damageIncoming);  //esto es para que si la vida baja de 0 se quede en 0 y no aparezca un numero negativo
     }
@@ -63,7 +69,7 @@ public abstract class GameCharacter {
         }
     }
     public void equipWeapon(Weapon weapon) {
-        this.weapon = weapon;
+        this.equippedWeapon = weapon;
         System.out.println("Now " + this.name + " has: " + weapon.getName());
     }
 
@@ -89,12 +95,13 @@ public abstract class GameCharacter {
     public void setArmour(int armour){this.armour = armour;}
     public int getArmour(){return this.armour;}
 
+
     public void setCanAttack(boolean canAttack){this.canAttack = canAttack;}
 
 
     @Override
     public String toString() {
-        String weaponName = (this.weapon != null) ? this.weapon.getName() : "None";
+        String weaponName = (this.equippedWeapon != null) ? this.equippedWeapon.getName() : "None";
             return "Name:" + this.name + "\t Life:" + this.currentHealth + "/" + this.maxHealth + "HP" + "\t Damage:" +
                     this.baseDamage + "\tWeapon:" + weaponName ;
     }
