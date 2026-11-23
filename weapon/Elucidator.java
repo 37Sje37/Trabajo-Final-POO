@@ -4,31 +4,29 @@ import characters.GameCharacter;
 
 public class Elucidator extends Sword{
 
-    protected int heavyBlowProbability;
+    protected double skillProbability;
 
 
-    public Elucidator(String name, int baseDamage, double sharpness, int heavyBlowProbability){
-        super(name, baseDamage, sharpness);
-        this.heavyBlowProbability = heavyBlowProbability;
+    public Elucidator(){
+        super("Eclucidator", 70, 100);
+        this.skillProbability = 0.30;
     }
 
     @Override
     public int getDamage(){
-        if(Math.random() < sharpness){
-            return this.baseDamage;
-        }else{
-            return  (int)(1.5 *this.baseDamage);
+        int damage = super.getDamage();
+        this.decreaseSharpness(10);
+
+        if(Math.random() < skillProbability){
+            System.out.println("Sword Skill activated: Vorpal Strike!");
+            damage = (int)(damage*1.5);
         }
-    }
-
-    public void applyEffectWeapon(GameCharacter target){
-        if(Math.random() < this.heavyBlowProbability);
-
+        return damage;
     }
 
     @Override
     public String toString(){
-        return super.toString() + "\t Heavy Blow Probability:" + this.heavyBlowProbability ;
+        return super.toString() + "\t Skill Probability:" + this.skillProbability;
     }
 
 

@@ -1,5 +1,7 @@
 package weapon;
 
+import characters.GameCharacter;
+
 public abstract class Weapon {
 
     protected String name;
@@ -10,12 +12,16 @@ public abstract class Weapon {
         this.baseDamage = baseDamage;
     }
 
+    public int getBaseDamage(){return this.baseDamage;}
+
     public int getDamage(){
         return this.baseDamage;
     }
     public String getName(){
         return this.name;
     }
+
+    public void applyEffectWeapon(GameCharacter attacker, GameCharacter target){}
 
     @Override
     public String toString (){
