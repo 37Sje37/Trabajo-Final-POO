@@ -2,10 +2,10 @@ package effects;
 
 import characters.GameCharacter;
 
-public class Paralize extends Effect{
+public class Paralysis extends Effect{
 
 
-    public Paralize(String name, int remainingTurns){
+    public Paralysis(int remainingTurns){
         super("Paralize",remainingTurns);
     }
 
