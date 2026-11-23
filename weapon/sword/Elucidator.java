@@ -1,6 +1,4 @@
-package weapon;
-
-import characters.GameCharacter;
+package weapon.sword;
 
 public class Elucidator extends Sword{
 

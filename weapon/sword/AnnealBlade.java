@@ -1,4 +1,4 @@
-package weapon;
+package weapon.sword;
 
 import effects.Bleed;
 import characters.GameCharacter;

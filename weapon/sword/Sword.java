@@ -1,6 +1,8 @@
-package weapon;
+package weapon.sword;
 
-public class Sword extends Weapon{
+import weapon.Weapon;
+
+public class Sword extends Weapon {
 
     int sharpness;
     public Sword(String name, int baseDamage, int sharpness){
