@@ -89,6 +89,8 @@ public abstract class GameCharacter {
     public void setArmour(int armour){this.armour = armour;}
     public int getArmour(){return this.armour;}
 
+    public void setCanAttack(boolean canAttack){this.canAttack = canAttack;}
+
 
     @Override
     public String toString() {
@@ -97,4 +99,4 @@ public abstract class GameCharacter {
                     this.baseDamage + "\tWeapon:" + weaponName ;
     }
 }
-    
+

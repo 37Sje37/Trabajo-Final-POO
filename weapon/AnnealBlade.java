@@ -1,19 +1,28 @@
 package weapon;
 
-public class AnnealBlade extends Sword{
-    int bleedProbability;
+import effects.Bleed;
+import characters.GameCharacter;
 
-    public AnnealBlade(String name, int baseDamage, double criticProbability){
+public class AnnealBlade extends Sword{
+    protected double bleedProbability;
+
+    public AnnealBlade(String name, int baseDamage, double sharpness){
         super("Anneal Blade",20, 40);
         this.bleedProbability = 30;
     }
 
-    public void setBleedProbability(int bleedProbability) {
-        this.bleedProbability = bleedProbability;
+    public void applyEffectWeapon(GameCharacter attacker, GameCharacter target){
+        if(Math.random() < this.bleedProbability){
+            System.out.println(attacker.getName() + " cuts " + target.getName() + " and now is Bleeding" );
+            target.applyEffect((new Bleed(3,40)));
+        }
+        this.decreaseSharpness(10);
     }
 
     @Override
-    public int getDamage(){
-
+    public String toString(){
+        return "Name:"+ this.name + "\tDamage:" + this.baseDamage + "\tBleed Probability:" + this.bleedProbability;
     }
+
+
 }

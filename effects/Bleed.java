@@ -6,7 +6,7 @@ public class Bleed extends Effect{
 
     int healthPorcentage; //este efecto quita en funcion de vida maxima
 
-    public Bleed(String name, int remainingTurns, int healthPorcentage){
+    public Bleed(int remainingTurns, int healthPorcentage){
         super("Bleed",remainingTurns);
         this.healthPorcentage = healthPorcentage /100 ;
     }

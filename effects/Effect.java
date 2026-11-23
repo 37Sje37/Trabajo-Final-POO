@@ -29,6 +29,7 @@ public abstract class Effect {
         return remainingTurns;
     }
 
+ @Override
     public String toString(){
         return "Name:" + this.name + "Remaining turns:" +this.remainingTurns;
     }
