@@ -8,7 +8,7 @@ Usuarios:
 -Isaac
 
 
-de que tarta el trabajo
+de que trata el trabajo
 
 
 summary de lo que hemos hecho
@@ -16,7 +16,7 @@ historia
 en lo q nos hemos basado
 
 
-como se juegoa
+como se juega
 
 
 que hemos hecho cada uno
