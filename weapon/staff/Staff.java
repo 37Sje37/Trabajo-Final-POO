@@ -4,8 +4,9 @@ import characters.GameCharacter;
 import effects.Effect;
 import weapon.Weapon;
 
-public abstract class Staff extends Weapon {
+import characters.GameCharacter;
 
+public abstract class Staff extends Weapon {
     protected int manaUse;
     protected int manaMax;
     protected int currentMana;
@@ -17,34 +18,30 @@ public abstract class Staff extends Weapon {
         this.currentMana = manaMax;
     }
 
-    public void rechargeMana(int amount){
-        this.currentMana = Math.min(this.manaMax, this.currentMana + amount);
-        System.out.println(this.name + " starts to make strange moves and now have " + this.currentMana);
-    }
-
+    // Ataque normal: NO gasta maná y hace el daño base del bastón
     @Override
     public int getDamage() {
-        if (this.currentMana >= this.manaUse) {
-            this.currentMana = Math.max(0, this.currentMana - this.manaUse);
-            return this.baseDamage;
-        } else {
-            System.out.println(this.name + " is out of mana! Weak physical hit.");
-            return (int) (this.baseDamage * 0.25);
-        }
+        return this.baseDamage;
     }
-
-    @Override
-    public abstract void castSpellEffect(GameCharacter attacker, GameCharacter target);
 
     protected double getManaRatio() {
         return (double) this.currentMana / this.manaMax;
     }
 
-    public int getManaUse(){return this.manaUse;}
-    public void setManaUse(int manaUse){this.manaUse = manaUse;}
-    public int getManaMax(){return this.manaMax;}
+    public void rechargeMana(int amount) {
+        this.currentMana = Math.min(this.manaMax, this.currentMana + amount);
+    }
+
+    // Modo 1 (Gratis): Mínima probabilidad de aplicar efecto tras golpear
+    @Override
+    public abstract void applyWeaponEffect(GameCharacter attacker, GameCharacter target);
+
+    // Modo 2 (Cuesta maná): Daño directo + 100% de probabilidad de efecto
+    @Override
+    public abstract void castSpellEffect(GameCharacter attacker, GameCharacter target);
 
     @Override
-    public String toString(){return super.toString() + "\tMana to Use:" + this.manaUse +
-            "\t Current Mana: " + this.currentMana + "/" + this.manaMax ;}
+    public String toString() {
+        return super.toString() + "\tMana: " + this.currentMana + "/" + this.manaMax + "\tMana Cost: " + this.manaUse;
+    }
 }
