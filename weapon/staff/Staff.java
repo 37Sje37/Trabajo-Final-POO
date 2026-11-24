@@ -1,14 +1,11 @@
 package weapon.staff;
 
 import characters.GameCharacter;
-import effects.Effect;
 import weapon.Weapon;
 
-import characters.GameCharacter;
-
 public abstract class Staff extends Weapon {
-    protected int manaUse;
-    protected int manaMax;
+    protected final int manaUse;
+    protected final int manaMax;
     protected int currentMana;
 
     public Staff(String name, int baseDamage, double apperanceProbability, int manaUse, int manaMax) {

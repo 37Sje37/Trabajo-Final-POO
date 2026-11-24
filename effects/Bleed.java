@@ -4,15 +4,15 @@ import characters.GameCharacter;
 
 public class Bleed extends Effect{
 
-    private double healthPorcentage; //este efecto quita en funcion de vida maxima
+    private final double healthPercentage; //este efecto quita en funcion de vida maxima
 
-    public Bleed(int remainingTurns, int healthPorcentage){
+    public Bleed(int remainingTurns, int healthPercentage){
         super("Bleed",remainingTurns);
-        this.healthPorcentage = healthPorcentage /100 ;
+        this.healthPercentage = (double) healthPercentage /100 ;
     }
 
     public double getHealthPorcentage(){
-        return this.healthPorcentage;
+        return this.healthPercentage;
     }
 
     @Override
@@ -23,10 +23,8 @@ public class Bleed extends Effect{
 
     @Override
     public String toString(){
-        return super.toString() + "\t Burning Damage: " + this.healthPorcentage;
+        return super.toString() + "\t Burning Damage: " + this.healthPercentage;
     }
-
-    public void setHealthPorcentage(double healthPorcentage){this.healthPorcentage = healthPorcentage;}
 
 }
 

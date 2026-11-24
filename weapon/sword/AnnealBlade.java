@@ -5,7 +5,7 @@ import characters.GameCharacter;
 
 public class AnnealBlade extends Sword{
 
-    private double bleedProbability;
+    private final double bleedProbability;
 
     public AnnealBlade(double apperanceProbability,int sharpness){
         super("Anneal Blade",20, apperanceProbability,sharpness);

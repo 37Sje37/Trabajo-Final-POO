@@ -2,12 +2,12 @@ package weapon.sword;
 
 public class Elucidator extends Sword{
 
-    private Double skillProbability;
+    private final double skillProbability;
 
 
     public Elucidator(double apperanceProbability,int sharpness){
         super("Eclucidator", 70,apperanceProbability, sharpness);
-        this.skillProbability = null;
+        this.skillProbability = 0.30;
     }
 
 

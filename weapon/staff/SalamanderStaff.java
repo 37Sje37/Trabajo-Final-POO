@@ -2,14 +2,13 @@ package weapon.staff;
 
 import characters.GameCharacter;
 import effects.Burn;
-import effects.Effect;
 
 public class SalamanderStaff extends Staff{
 
-    private double minEffectProbability;
-    private int minBurnDamage;
-    private int maxBurnDamage;
-    private double luck;
+    private final double minEffectProbability;
+    private final int minBurnDamage;
+    private final int maxBurnDamage;
+    private final double luck;
 
     public SalamanderStaff() {
         super("Salamander Staff", 10, 0.02, 30, 100);

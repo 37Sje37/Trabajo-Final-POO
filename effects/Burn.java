@@ -4,7 +4,7 @@ import characters.GameCharacter;
 
 public class Burn extends Effect{
 
-    private int damageBurning;  //este efecto quita un daño concreto
+    private final int damageBurning;  //este efecto quita un daño concreto
 
     public Burn(int remainingTurns, int damageBurning) {
         super("Burn",remainingTurns);

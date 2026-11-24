@@ -95,6 +95,8 @@ public abstract class GameCharacter {
     public void setArmour(int armour){this.armour = armour;}
     public int getArmour(){return this.armour;}
 
+    public void setCurrentEffect(Effect effect){this.currentEffect = effect;}
+
 
     public void setCanAttack(boolean canAttack){this.canAttack = canAttack;}
 

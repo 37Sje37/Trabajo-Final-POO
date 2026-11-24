@@ -4,9 +4,9 @@ import characters.GameCharacter;
 
 public abstract class Weapon {
 
-    protected String name;
-    protected int baseDamage;
-    protected double apperanceProbability; //entre 0-1
+    protected final String name;
+    protected final int baseDamage;
+    protected final double apperanceProbability; //entre 0-1
 
     public Weapon(String name,int baseDamage,double apperanceProbability){
         this.name = name;

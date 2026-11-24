@@ -3,7 +3,7 @@ package effects;
 import characters.GameCharacter;
 
 public abstract class Effect {
-    protected String name;
+    protected final String name;
     protected int remainingTurns;
 
     public Effect(String name, int remainingTurns) {

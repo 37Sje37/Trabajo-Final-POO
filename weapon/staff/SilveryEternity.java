@@ -5,8 +5,8 @@ import effects.Paralysis;
 
 public class SilveryEternity extends Staff{
 
-    private double minEffectProbability;
-    private double luck;
+    private final double minEffectProbability;
+    private final double luck;
 
 
     public SilveryEternity(){

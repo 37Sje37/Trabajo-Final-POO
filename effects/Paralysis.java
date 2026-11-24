@@ -6,7 +6,7 @@ public class Paralysis extends Effect{
 
 
     public Paralysis(int remainingTurns){
-        super("Paralize",remainingTurns);
+        super("Paralysis",remainingTurns);
     }
 
      @Override
