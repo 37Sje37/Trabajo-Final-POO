@@ -11,7 +11,7 @@ public class SalamanderStaff extends Staff{
     private final double luck;
 
     public SalamanderStaff() {
-        super("Salamander Staff", 10, 0.02, 30, 100);
+        super("Salamander Staff", 10, 30, 100);
         this.minEffectProbability = 0.15; // Mínima probabilidad sin gastar maná (15%)
         this.minBurnDamage = 5;
         this.maxBurnDamage = 15;

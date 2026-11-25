@@ -4,9 +4,12 @@ import weapon.Weapon;
 
 public class Sword extends Weapon {
 
+    public static final int MAXSHARPNESS = 100;
+
     int sharpness;
-    public Sword(String name, int baseDamage,double apperanceProbability, int sharpness){
-        super(name, baseDamage,apperanceProbability);
+
+    public Sword(String name, int baseDamage, int sharpness){
+        super(name, baseDamage);
         this.sharpness = sharpness;
     }
 

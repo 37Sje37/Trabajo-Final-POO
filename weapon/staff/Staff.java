@@ -8,8 +8,8 @@ public abstract class Staff extends Weapon {
     protected final int manaMax;
     protected int currentMana;
 
-    public Staff(String name, int baseDamage, double apperanceProbability, int manaUse, int manaMax) {
-        super(name, baseDamage, apperanceProbability);
+    public Staff(String name, int baseDamage, int manaUse, int manaMax) {
+        super(name, baseDamage);
         this.manaUse = manaUse;
         this.manaMax = manaMax;
         this.currentMana = manaMax;
@@ -36,6 +36,9 @@ public abstract class Staff extends Weapon {
     // Modo 2 (Cuesta maná): Daño directo + 100% de probabilidad de efecto
     @Override
     public abstract void castSpellEffect(GameCharacter attacker, GameCharacter target);
+
+    public int getManaMax(){return this.manaMax;}
+    public int getCurrentMana(){return this.currentMana;}
 
     @Override
     public String toString() {

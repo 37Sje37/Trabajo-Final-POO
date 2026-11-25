@@ -5,8 +5,8 @@ public class LambentLight extends Sword{
     private final int maxComboHits;
     private final double comboProbability;
 
-    public LambentLight(double apperanceProbability, int sharpness) {
-        super("Lambent Light", 30, apperanceProbability, sharpness);
+    public LambentLight(int sharpness) {
+        super("Lambent Light", 30, sharpness);
         this.maxComboHits = 4;        // Máximo de golpes con filo al 100%
         this.comboProbability = 0.65; // 65% de probabilidad base de activar combo
     }

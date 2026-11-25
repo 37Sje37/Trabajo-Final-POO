@@ -10,7 +10,7 @@ public class SilveryEternity extends Staff{
 
 
     public SilveryEternity(){
-        super("Silvery Eternity", 20,0.05,40,300 );
+        super("Silvery Eternity", 20,40,300 );
         this.minEffectProbability = 0.10; // Mínima probabilidad sin gastar maná (10%)
         this.luck = 0.20;
     }

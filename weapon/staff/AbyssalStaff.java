@@ -11,7 +11,7 @@ public class AbyssalStaff extends Staff{
     private final double drainPercentage;
 
     public AbyssalStaff(){
-        super("Abysal Staff",30,0.03,30,100);
+        super("Abysal Staff",30,30,100);
         this.minEffectProbability = 0.14; // 14% de probabilidad en ataque normal (0 maná)
         this.drainPercentage = 0.55;      // 55% de robo de vida
 

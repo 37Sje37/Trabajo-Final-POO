@@ -5,8 +5,8 @@ public class Elucidator extends Sword{
     private final double skillProbability;
 
 
-    public Elucidator(double apperanceProbability,int sharpness){
-        super("Eclucidator", 70,apperanceProbability, sharpness);
+    public Elucidator(int sharpness){
+        super("Eclucidator", 70, sharpness);
         this.skillProbability = 0.30;
     }
 

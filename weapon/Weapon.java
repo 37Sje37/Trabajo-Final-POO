@@ -6,12 +6,10 @@ public abstract class Weapon {
 
     protected final String name;
     protected final int baseDamage;
-    protected final double apperanceProbability; //entre 0-1
 
-    public Weapon(String name,int baseDamage,double apperanceProbability){
+    public Weapon(String name,int baseDamage){
         this.name = name;
         this.baseDamage = baseDamage;
-        this.apperanceProbability = apperanceProbability;
     }
 
     public void castSpellEffect(GameCharacter attacker, GameCharacter target) {

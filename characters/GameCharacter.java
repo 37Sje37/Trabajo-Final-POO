@@ -2,8 +2,14 @@ package characters;
 
 import effects.Effect;
 import weapon.Weapon;
+import crystals.Crystal;
+
+import java.util.List;
+import javax.swing.text.html.HTMLDocument.Iterator;
 
 public abstract class GameCharacter {
+
+    private static final int MAX_CRYSTALS = 2;
 
 
     protected String name;
@@ -13,7 +19,9 @@ public abstract class GameCharacter {
     protected int armour;
     protected boolean canAttack;
     protected Weapon equippedWeapon;
-    protected Effect currentEffect;
+    private List<Effect> activeEffects;
+    private Crystal[] crystals;
+
 
     public GameCharacter(String name, int currentHealth, int damage, int armour){
         this.name = name;
@@ -23,7 +31,8 @@ public abstract class GameCharacter {
         this.armour = armour;
         this.canAttack = true;
         this.equippedWeapon = null;
-        this.currentEffect = null;
+        this.activeEffects = null;
+        this.crystals = new Crystal[MAX_CRYSTALS];
     }
 
     public void attack(GameCharacter target) {
@@ -51,23 +60,41 @@ public abstract class GameCharacter {
         this.currentHealth = Math.max(0, this.currentHealth - damageIncoming);  //esto es para que si la vida baja de 0 se quede en 0 y no aparezca un numero negativo
     }
 
-    public void applyEffect(Effect newEffect){
-        this.currentEffect = newEffect;
-        System.out.println(this.name + " is now under the effect of " + this.currentEffect.getName());
-    }
+    public void applyEffect(Effect newEffect) {
+        if (newEffect == null) return;
 
-    public void processEffect(){
-        if(this.currentEffect == null){
-            return;
+        // Si ya tiene un efecto del mismo tipo, lo renueva
+        for (int i = 0; i < this.activeEffects.size(); i++) {
+            if (this.activeEffects.get(i).getClass().equals(newEffect.getClass())) {
+                this.activeEffects.set(i, newEffect);
+                System.out.println(this.name + "'s " + newEffect.getName() + " effect has been refreshed!");
+                return;
+            }
         }
 
-        this.currentEffect.applyEffect(this);
+        this.activeEffects.add(newEffect);
+        System.out.println(this.name + " is now affected by " + newEffect.getName() + "!");
+    }
 
-        if(this.currentEffect.isExpired()){
-            System.out.println(this.name + " has being recovered from " + this.currentEffect.getName());
-            this.currentEffect = null;
+    public void processEffects() {
+        for (int i = this.activeEffects.size() - 1; i >= 0; i--) {
+            Effect effect = this.activeEffects.get(i);
+            effect.applyEffect(this);
+
+            if (effect.getRemainingTurns() <= 0) {
+                this.activeEffects.remove(i);
+            }
         }
     }
+
+    public void clearEffects() {
+        this.activeEffects.clear();
+    }
+
+    public List<Effect> getActiveEffects() {
+        return this.activeEffects;
+    }
+
     public void equipWeapon(Weapon weapon) {
         this.equippedWeapon = weapon;
         System.out.println("Now " + this.name + " has: " + weapon.getName());
@@ -77,6 +104,48 @@ public abstract class GameCharacter {
         this.currentHealth = Math.min(this.maxHealth, this.currentHealth + amount); //para que no se pueda curar ,as de lo que tiene de max de vida
         System.out.println(this.name + " heals and now has" + this.currentHealth +"/" + this.maxHealth+"HP");
     }
+
+    public boolean addCrystal(Crystal crystal){
+        for(int i = 0; i < 2 ; i++) {
+            if (this.crystals[i] == null) {
+                this.crystals[i] = crystal;
+                this.crystals[i] = crystal;
+                System.out.println(this.name + " stored " + crystal.getName() + " in slot " + (i + 1) + ".");
+                return true;
+            }
+        }
+            System.out.println(this.name + "'s potion belt is full! (Max " + MAX_CRYSTALS + " crystals)");
+            return false;
+
+    }
+
+    public void useCrystral(int slotIndex) {
+        if (!this.canAttack) {
+            System.out.println(this.name + " cannot use crystals this turn!");
+            return;
+        }
+        if (slotIndex < 0 || slotIndex >= this.crystals.length || this.crystals[slotIndex] == null) {
+            System.out.println("No crystal in that slot!");
+            return;
+        }
+        this.crystals[slotIndex].activate(this);
+        if (this.crystals[slotIndex].isShattered()) {
+            this.crystals[slotIndex] = null;
+        }
+    }
+
+    public boolean removeEffectByType(Class<? extends Effect> effectClass) {
+        boolean removed = false;
+        for (int i = this.activeEffects.size() - 1; i >= 0; i--) {
+            if (effectClass.isInstance(this.activeEffects.get(i))) {
+                this.activeEffects.remove(i);
+                removed = true;
+            }
+        }
+        return removed;
+    }
+
+    public void modifyBaseDamage(int amount) { this.baseDamage = Math.max(0, this.baseDamage + amount); }
 
     public boolean isAlive(){
         return this.currentHealth > 0;
@@ -95,10 +164,10 @@ public abstract class GameCharacter {
     public void setArmour(int armour){this.armour = armour;}
     public int getArmour(){return this.armour;}
 
-    public void setCurrentEffect(Effect effect){this.currentEffect = effect;}
-
-
     public void setCanAttack(boolean canAttack){this.canAttack = canAttack;}
+    public boolean getCanAttack(){return this.canAttack;}
+
+    public Weapon getWeapon(){return this.equippedWeapon;}
 
 
     @Override

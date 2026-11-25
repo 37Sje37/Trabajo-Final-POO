@@ -7,8 +7,8 @@ public class AnnealBlade extends Sword{
 
     private final double bleedProbability;
 
-    public AnnealBlade(double apperanceProbability,int sharpness){
-        super("Anneal Blade",20, apperanceProbability,sharpness);
+    public AnnealBlade(int sharpness){
+        super("Anneal Blade",20,sharpness);
         this.bleedProbability = sharpness*0.9;
     }
 
