@@ -38,17 +38,17 @@ public class ItemCatalog {
         ItemCatalog catalog = new ItemCatalog();
 
         // --- ARMAS (Snipers, Staffs, Swords) ---
-        catalog.addItem(new AMRTiamat());
-        catalog.addItem(new HecateII());
-        catalog.addItem(new L115A3());
+        catalog.addItem(new AMRTiamat(1));
+        catalog.addItem(new HecateII(1));
+        catalog.addItem(new L115A3(1));
 
-        catalog.addItem(new AbyssalStaff());
-        catalog.addItem(new SalamanderStaff());
-        catalog.addItem(new SilveryEternity());
+        catalog.addItem(new AbyssalStaff(1));
+        catalog.addItem(new SalamanderStaff(1));
+        catalog.addItem(new SilveryEternity(1));
 
-        catalog.addItem(new AnnealBlade(3));
-        catalog.addItem(new Elucidator(3));
-        catalog.addItem(new LambentLight(3));
+        catalog.addItem(new AnnealBlade(3,1));
+        catalog.addItem(new Elucidator(3,1));
+        catalog.addItem(new LambentLight(3,1));
 
         // --- CRISTALES ---
         catalog.addItem(new BandageCrystal());

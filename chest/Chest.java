@@ -1,70 +1,73 @@
 package items;
-
-import characters.GameCharacter;
 import items.crystals.*;
 import items.weapon.Weapon;
 import items.weapon.sniper.*;
 import items.weapon.staff.*;
 import items.weapon.sword.*;
+import ornaments.Colors;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Chest {
-    private boolean opened;
+    private boolean isBossChest;
+    private List<Object> rewards;
 
-    public Chest() {
-        this.opened = false;
+    public Chest(int floorNumber, boolean isBossStage) {
+        this.isBossChest = isBossStage;
+        this.rewards = new ArrayList<>();
+        generateRewards(floorNumber);
     }
 
-    public void open(GameCharacter player) {
-        if (this.opened) {
-            System.out.println("This chest is already empty!");
-            return;
+    private void generateRewards(int floorNumber) {
+        Random rand = new Random();
+
+        if (isBossChest) {
+            // Cofre de Boss: 1 arma escalada a (floorNumber + 1) + 1 cristal aleatorio
+            Weapon bossWeapon = getRandomWeapon(rand);
+            bossWeapon.setLevel(floorNumber + 1);
+            rewards.add(bossWeapon);
+            rewards.add(getRandomCrystal(rand));
+        } else {
+            // Cofre normal de Stage: 50% cristal, 50% arma del nivel del piso actual
+            if (rand.nextBoolean()) {
+                rewards.add(getRandomCrystal(rand));
+            } else {
+                Weapon stageWeapon = getRandomWeapon(rand);
+                stageWeapon.setLevel(floorNumber);
+                rewards.add(stageWeapon);
+            }
         }
-
-        this.opened = true;
-
-        Crystal rewardCrystal = generateRandomCrystal();
-        Weapon rewardWeapon = generateRandomWeapon();
-
-        System.out.println(player.getName() + " opens a Treasure Chest and finds:");
-        System.out.println("  - Crystal: " + rewardCrystal.getName());
-        System.out.println("  - Weapon: " + rewardWeapon.getName());
-
-        player.addCrystal(rewardCrystal);
-        player.equipWeapon(rewardWeapon);
     }
 
-    private Weapon generateRandomWeapon() {
-        Weapon[] weapons = {
-                new AMRTiamat(),
-                new HecateII(),
-                new L115A3(),
-                new AbyssalStaff(),
-                new SalamanderStaff(),
-                new SilveryEternity(),
-                new AnnealBlade((int)((0.5 + (Math.random() * 0.5))*100)),
-                new Elucidator((int)((0.5 + (Math.random() * 0.5))*100)),
-                new LambentLight((int)((0.5 + (Math.random() * 0.5))*100))
+    private Weapon getRandomWeapon(Random rand) {
+        Weapon[] pool = {
+                new AMRTiamat(1), new HecateII(1), new L115A3(1),
+                new AbyssalStaff(1), new SalamanderStaff(1), new SilveryEternity(1),
+                new AnnealBlade(1,1), new Elucidator(1,1), new LambentLight(1,1)
         };
-
-        int randomIndex = (int) (Math.random() * weapons.length);
-        return weapons[randomIndex];
+        return pool[rand.nextInt(pool.length)];
     }
 
-    private Crystal generateRandomCrystal() {
-        Crystal[] crystals = {
-                new HealingCrystal(),
-                new WeaponCrystal(),
-                new PowerCrystal(),
-                new CoffeeCrystal(),
-                new BandageCrystal(),
-                new FrostCrystal()
+    private Crystal getRandomCrystal(Random rand) {
+        Crystal[] pool = {
+                new BandageCrystal(), new CoffeeCrystal(), new FrostCrystal(),
+                new HealingCrystal(), new PowerCrystal(), new WeaponCrystal()
         };
-
-        int randomIndex = (int) (Math.random() * crystals.length);
-        return crystals[randomIndex];
+        return pool[rand.nextInt(pool.length)];
     }
 
-    public boolean isOpened() {
-        return this.opened;
+    public List<Object> open() {
+        String title = isBossChest
+                ? Colors.GOLD + " [ BOSS TREASURE CHEST OPENED! ] " + Colors.RESET
+                : Colors.YELLOW + " [ STAGE CHEST OPENED! ]" + Colors.RESET;
+
+        System.out.println("\n  " + title);
+        for (Object item : rewards) {
+            System.out.println("    -> Obtienes: " + item.toString());
+        }
+        System.out.println();
+        return rewards;
     }
 }

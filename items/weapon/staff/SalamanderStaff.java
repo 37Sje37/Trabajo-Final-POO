@@ -4,25 +4,41 @@ import characters.GameCharacter;
 import effect.Burn;
 import ornaments.Colors;
 
-public class SalamanderStaff extends Staff{
+public class SalamanderStaff extends Staff {
 
-    private final double minEffectProbability;
-    private final int minBurnDamage;
-    private final int maxBurnDamage;
-    private final double luck;
+    private double minEffectProbability;
+    private int minBurnDamage;
+    private int maxBurnDamage;
+    private double luck;
 
-    public SalamanderStaff() {
-        super("Salamander Staff", 10, 30, 100);
-        this.minEffectProbability = 0.15; // Mínima probabilidad sin gastar maná (15%)
-        this.minBurnDamage = 5;
-        this.maxBurnDamage = 15;
-        this.luck = 0.25;
+    public SalamanderStaff(int level) {
+        super("Salamander Staff", 10, 30, 100, level);
+        recalculateStats();
+    }
+
+    private void recalculateStats() {
+        this.minEffectProbability = Math.min(1.0, 0.15 + 0.03 * this.level);
+        this.minBurnDamage = 5 + 2 * this.level;
+        this.maxBurnDamage = 15 + 3 * this.level;
+        this.luck = Math.min(1.0, 0.25 + 0.03 * this.level);
+    }
+
+    @Override
+    public void levelUp() {
+        super.levelUp();
+        recalculateStats();
+    }
+
+    @Override
+    public void setLevel(int level) {
+        super.setLevel(level);
+        recalculateStats();
     }
 
     private int calculateRandomBurnDamage() {
         double baseRandom = this.minBurnDamage + Math.random() * (this.maxBurnDamage - this.minBurnDamage);
         double luckMultiplier = 1.0 + (Math.random() * this.luck);
-        return Math.max(1, (int) Math.round(baseRandom * this.getManaRatio() * luckMultiplier)); //[cite: 1]
+        return Math.max(1, (int) Math.round(baseRandom * this.getManaRatio() * luckMultiplier));
     }
 
     @Override
@@ -33,13 +49,12 @@ public class SalamanderStaff extends Staff{
         }
     }
 
-@Override
+    @Override
     public void castSpellEffect(GameCharacter attacker, GameCharacter target) {
         if (this.currentMana >= this.manaUse) {
             int burnDamage = calculateRandomBurnDamage();
-            int directMagicDamage = attacker.getBaseDamage() + (int) Math.round(this.baseDamage * 1.5);
+            int directMagicDamage = attacker.getBaseDamage() + (int) Math.round(this.getDamage() * 1.5);
 
-            // Descontamos el maná tras calcular la potencia del hechizo
             this.currentMana = Math.max(0, this.currentMana - this.manaUse);
 
             System.out.println(attacker.getName() + " unleashes a fireball with " + this.name + " for "
@@ -55,9 +70,6 @@ public class SalamanderStaff extends Staff{
     @Override
     public String toString() {
         return super.toString() + Colors.GRAY + "\tMin Burn DMG: " + Colors.BRIGHT_RED + this.minBurnDamage +
-                Colors.GRAY + "\tLuck: " + Colors.YELLOW + (int) (this.luck * 100) + "%" + Colors.RESET;
+                Colors.GRAY + "\tLuck: " + Colors.YELLOW + (int) Math.round(this.luck * 100) + "%" + Colors.RESET;
     }
-
-
 }
-

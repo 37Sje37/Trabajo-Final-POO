@@ -9,17 +9,16 @@ public abstract class Staff extends Weapon {
     protected final int manaMax;
     protected int currentMana;
 
-    public Staff(String name, int baseDamage, int manaUse, int manaMax) {
-        super(name, baseDamage);
+    public Staff(String name, int baseDamage, int manaUse, int manaMax, int level) {
+        super(name, baseDamage, level);
         this.manaUse = manaUse;
-        this.manaMax = manaMax;
-        this.currentMana = manaMax;
+        this.manaMax = Math.max(1, manaMax);
+        this.currentMana = this.manaMax;
     }
 
-    // Ataque normal: NO gasta maná y hace el daño base del bastón
     @Override
     public int getDamage() {
-        return this.baseDamage;
+        return super.getDamage();
     }
 
     protected double getManaRatio() {
@@ -27,23 +26,28 @@ public abstract class Staff extends Weapon {
     }
 
     public void rechargeMana(int amount) {
-        this.currentMana = Math.min(this.manaMax, this.currentMana + amount);
+        this.currentMana = Math.min(this.manaMax, Math.max(0, this.currentMana + amount));
     }
 
-    // Modo 1 (Gratis): Mínima probabilidad de aplicar efecto tras golpear
     @Override
     public abstract void applyWeaponEffect(GameCharacter attacker, GameCharacter target);
 
-    // Modo 2 (Cuesta maná): Daño directo + 100% de probabilidad de efecto
     @Override
     public abstract void castSpellEffect(GameCharacter attacker, GameCharacter target);
 
-    public int getManaMax(){return this.manaMax;}
-    public int getCurrentMana(){return this.currentMana;}
+    public int getManaMax() {
+        return this.manaMax;
+    }
+
+    public int getCurrentMana() {
+        return this.currentMana;
+    }
 
     @Override
     public String toString() {
-        return super.toString() + Colors.GRAY + "\tMana: " + Colors.BLUE + this.currentMana + "/" + this.manaMax +
+        return Colors.GRAY + "Name: " + Colors.CYAN + this.name + " (Lv." + this.level + ")" +
+                Colors.GRAY + "\tDamage: " + Colors.RED + this.getScaledBaseDamage() +
+                Colors.GRAY + "\tMana: " + Colors.BLUE + this.currentMana + "/" + this.manaMax +
                 Colors.GRAY + "\tMana Cost: " + Colors.TURQUOISE + this.manaUse + Colors.RESET;
     }
 }

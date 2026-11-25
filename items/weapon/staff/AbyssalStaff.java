@@ -4,39 +4,49 @@ import characters.GameCharacter;
 import effect.Drain;
 import ornaments.Colors;
 
+public class AbyssalStaff extends Staff {
 
-public class AbyssalStaff extends Staff{
+    private double minEffectProbability;
+    private double drainPercentage;
 
+    public AbyssalStaff(int level) {
+        super("Abyssal Staff", 30, 30, 100, level);
+        recalculateStats();
+    }
 
-    private final double minEffectProbability;
-    private final double drainPercentage;
+    private void recalculateStats() {
+        this.minEffectProbability = Math.min(1.0, 0.14 + 0.02 * this.level);
+        this.drainPercentage = Math.min(1.0, 0.55 + 0.02 * (this.level - 1));
+    }
 
-    public AbyssalStaff(){
-        super("Abysal Staff",30,30,100);
-        this.minEffectProbability = 0.14; // 14% de probabilidad en ataque normal (0 maná)
-        this.drainPercentage = 0.55;      // 55% de robo de vida
+    @Override
+    public void levelUp() {
+        super.levelUp();
+        recalculateStats();
+    }
 
+    @Override
+    public void setLevel(int level) {
+        super.setLevel(level);
+        recalculateStats();
     }
 
     @Override
     public void applyWeaponEffect(GameCharacter attacker, GameCharacter target) {
         if (Math.random() < this.minEffectProbability) {
-            int damageDealt = attacker.getBaseDamage() + this.baseDamage;
+            int damageDealt = attacker.getBaseDamage() + this.getDamage();
             System.out.println(this.name + " activates minor Drain!");
 
-            // Instanciamos Drain y lo aplicamos al instante
             Drain drainEffect = new Drain(attacker, damageDealt, this.drainPercentage);
             drainEffect.applyEffect(target);
         }
     }
 
-    // MODO 2: Ataque mágico (Gasta maná, hace daño directo y aplica Drain del 55% al 100%)
     @Override
     public void castSpellEffect(GameCharacter attacker, GameCharacter target) {
         if (this.currentMana >= this.manaUse) {
-            int directDarkDamage = attacker.getBaseDamage() + (int) Math.round(this.baseDamage * 1.3);
+            int directDarkDamage = attacker.getBaseDamage() + (int) Math.round(this.getDamage() * 1.3);
 
-            // Descontamos el maná
             this.currentMana = Math.max(0, this.currentMana - this.manaUse);
 
             System.out.println(attacker.getName() + " casts Abyssal Siphon with " + this.name
@@ -44,7 +54,6 @@ public class AbyssalStaff extends Staff{
 
             target.takeDamage(directDarkDamage);
 
-            // Instanciamos Drain con el daño directo recién hecho y lo ejecutamos al momento
             Drain drainEffect = new Drain(attacker, directDarkDamage, this.drainPercentage);
             drainEffect.applyEffect(target);
         } else {
@@ -54,8 +63,7 @@ public class AbyssalStaff extends Staff{
 
     @Override
     public String toString() {
-        return super.toString() + Colors.GRAY + "\tDrain: " + Colors.ORANGE + (int) (this.drainPercentage * 100) + "%" +
-                Colors.GRAY + "\tProb to Drain: " + Colors.RED + (int) (this.minEffectProbability * 100) + "%" + Colors.RESET;
+        return super.toString() + Colors.GRAY + "\tDrain: " + Colors.ORANGE + (int) Math.round(this.drainPercentage * 100) + "%" +
+                Colors.GRAY + "\tProb to Drain: " + Colors.RED + (int) Math.round(this.minEffectProbability * 100) + "%" + Colors.RESET;
     }
-
 }

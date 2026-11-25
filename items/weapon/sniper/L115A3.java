@@ -4,46 +4,58 @@ import characters.GameCharacter;
 import effect.Paralysis;
 import ornaments.Colors;
 
-public class L115A3 extends SniperRifle{
+public class L115A3 extends SniperRifle {
 
-    private final double critProbability;
-    private final double stunProbability;
+    private double critProbability;
+    private double stunProbability;
 
-    public L115A3(){
-        super("Accuracy International L115A3", 30, 10);
-        this.critProbability = 0.45;
-        this.stunProbability = 0.35;
+    public L115A3(int level) {
+        super("Accuracy International L115A3", 30, 10, level);
+        recalculateStats();
+    }
+
+    private void recalculateStats() {
+        this.critProbability = Math.min(1.0, 0.45 + 0.04 * this.level);
+        this.stunProbability = Math.min(1.0, 0.35 + 0.03 * this.level);
+    }
+
+    @Override
+    public void levelUp() {
+        super.levelUp();
+        recalculateStats();
+    }
+
+    @Override
+    public void setLevel(int level) {
+        super.setLevel(level);
+        recalculateStats();
     }
 
     @Override
     public int getDamage() {
-
-        if(this.currentAmmo == 0) {
-            super.getDamage();
+        int damage = super.getDamage();
+        if (damage == 0) {
+            return 0; // Estaba sin balas y acaba de recargar en super.getDamage()
         }
-        int damage = this.baseDamage;
 
-        if(Math.random() < this.critProbability){
-            int critBullet = (int) Math.round(this.baseDamage*1.6);
-            return critBullet;
+        if (Math.random() < this.critProbability) {
+            System.out.println(Colors.BRIGHT_YELLOW + "Critical headshot!" + Colors.RESET);
+            return (int) Math.round(damage * 1.6);
         }
         return damage;
     }
 
     @Override
     public void applyWeaponEffect(GameCharacter attacker, GameCharacter target) {
-        if(Math.random() < this.stunProbability){
-            System.out.println("Your bullet has penetrate on the enemy and give Paralysis");
+        if (Math.random() < this.stunProbability) {
+            System.out.println("Your bullet penetrates the enemy and inflicts Paralysis!");
             target.applyEffect(new Paralysis(1));
         }
     }
 
     @Override
     public String toString() {
-        return super.toString() + Colors.GRAY + "\tCrit Probability: " + Colors.CYAN + (int) (this.critProbability * 100) + "%" +
-                Colors.GRAY + "\tStun Probability: " + Colors.GREEN + (int) (this.stunProbability * 100) + "%" + Colors.RESET;
+        return super.toString() + Colors.GRAY + "\tCrit Probability: " + Colors.CYAN + (int) Math.round(this.critProbability * 100) + "%" +
+                Colors.GRAY + "\tStun Probability: " + Colors.GREEN + (int) Math.round(this.stunProbability * 100) + "%" + Colors.RESET;
     }
-
-
-
 }

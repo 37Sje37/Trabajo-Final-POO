@@ -9,37 +9,40 @@ public class Sword extends Weapon {
 
     int sharpness;
 
-    public Sword(String name, int baseDamage, int sharpness){
-        super(name, baseDamage);
-        this.sharpness = sharpness;
+    public Sword(String name, int baseDamage, int sharpness, int level) {
+        super(name, baseDamage, level);
+        this.sharpness = Math.max(0, Math.min(MAXSHARPNESS, sharpness));
     }
 
-    public void decreaseSharpness(int amount){
+    public void decreaseSharpness(int amount) {
         this.sharpness = Math.max(0, this.sharpness - amount);
     }
 
     public void sharpen(int amount) {
-        this.sharpness = Math.min(100, this.sharpness + amount);
-        System.out.println(this.name + " sharpened! Current sharpness: " + this.sharpness + "/100");  //Afilar la espada
+        this.sharpness = Math.min(MAXSHARPNESS, this.sharpness + amount);
+        System.out.println(this.name + " sharpened! Current sharpness: " + this.sharpness + "/" + MAXSHARPNESS);
     }
 
-    public int getSharpness(){
+    public int getSharpness() {
         return this.sharpness;
     }
 
-    protected double getSharpnessRatio() {return this.sharpness / 100.0;}
+    protected double getSharpnessRatio() {
+        return this.sharpness / 100.0;
+    }
 
     @Override
-    public int getDamage(){
-        return (this.sharpness < 30) ? (int) (this.baseDamage * 0.8) : this.baseDamage;
-        // si la espada baja de un 30 de sharpness hace menos daño
+    public int getDamage() {
+        int scaledDamage = super.getDamage();
+        if (this.sharpness < 30) {
+            return (int) Math.round(scaledDamage * 0.8);
+        }
+        return scaledDamage;
     }
 
     @Override
     public String toString() {
-        return Colors.GRAY + "Name: " + Colors.CYAN + this.name +
-                Colors.GRAY + "\tDamage: " + Colors.RED + this.baseDamage +
-                Colors.GRAY + "\tSharpness: " + Colors.YELLOW + this.sharpness + "/100" + Colors.RESET;
+        return super.toString() + Colors.GRAY + "\tSharpness: " + Colors.WHITE +
+                this.sharpness + "/" + MAXSHARPNESS + Colors.RESET;
     }
-
 }

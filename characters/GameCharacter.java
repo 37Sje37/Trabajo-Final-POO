@@ -1,19 +1,19 @@
 package characters;
 
 import effect.Effect;
-import items.weapon.Weapon;
 import items.crystals.Crystal;
+import items.weapon.Weapon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameCharacter {
 
     private static final int MAX_CRYSTALS = 2;
 
-
     protected String name;
     protected int currentHealth;
-    protected int maxHealth = 100;
+    protected int maxHealth;
     protected int baseDamage;
     protected int armour;
     protected boolean canAttack;
@@ -21,16 +21,15 @@ public class GameCharacter {
     private List<Effect> activeEffects;
     private Crystal[] crystals;
 
-
-    public GameCharacter(String name, int currentHealth, int damage, int armour){
+    public GameCharacter(String name, int currentHealth, int damage, int armour) {
         this.name = name;
         this.currentHealth = currentHealth;
-        this.baseDamage = damage;
         this.maxHealth = currentHealth;
+        this.baseDamage = damage;
         this.armour = armour;
         this.canAttack = true;
         this.equippedWeapon = null;
-        this.activeEffects = null;
+        this.activeEffects = new ArrayList<>();
         this.crystals = new Crystal[MAX_CRYSTALS];
     }
 
@@ -48,22 +47,21 @@ public class GameCharacter {
         System.out.println(this.name + " attacks " + target.getName() + " for " + totalDamage + " damage!");
         target.takeDamage(totalDamage);
 
-        // Fase 2: Probabilidad de activar el efecto especial del arma equipada
         if (this.equippedWeapon != null) {
             this.equippedWeapon.applyWeaponEffect(this, target);
         }
     }
 
-    public void takeDamage(int damageIncoming){
-        System.out.println("Recives " + damageIncoming + "of damage" );
-        this.currentHealth = (int)Math.round(Math.max(0, this.currentHealth - (damageIncoming * (this.armour / 100.0))));
-        //esto es para que si la vida baja de 0 se quede en 0 y no aparezca un numero negativo
+    public void takeDamage(int damageIncoming) {
+        double reduction = Math.min(1.0, Math.max(0.0, this.armour / 100.0));
+        int finalDamage = (int) Math.round(damageIncoming * (1.0 - reduction));
+        System.out.println(this.name + " receives " + finalDamage + " damage!");
+        this.currentHealth = Math.max(0, this.currentHealth - finalDamage);
     }
 
     public void applyEffect(Effect newEffect) {
         if (newEffect == null) return;
 
-        // Si ya tiene un efecto del mismo tipo, lo renueva
         for (int i = 0; i < this.activeEffects.size(); i++) {
             if (this.activeEffects.get(i).getClass().equals(newEffect.getClass())) {
                 this.activeEffects.set(i, newEffect);
@@ -100,28 +98,26 @@ public class GameCharacter {
         System.out.println("Now " + this.name + " has: " + weapon.getName());
     }
 
-    public void heal(int amount){
-        this.currentHealth = Math.min(this.maxHealth, this.currentHealth + amount); //para que no se pueda curar ,as de lo que tiene de max de vida
-        System.out.println(this.name + " heals and now has" + this.currentHealth +"/" + this.maxHealth+"HP");
+    public void heal(int amount) {
+        this.currentHealth = Math.min(this.maxHealth, this.currentHealth + amount);
+        System.out.println(this.name + " heals and now has " + this.currentHealth + "/" + this.maxHealth + " HP");
     }
 
-    public boolean addCrystal(Crystal crystal){
-        for(int i = 0; i < 2 ; i++) {
+    public boolean addCrystal(Crystal crystal) {
+        for (int i = 0; i < MAX_CRYSTALS; i++) {
             if (this.crystals[i] == null) {
-                this.crystals[i] = crystal;
                 this.crystals[i] = crystal;
                 System.out.println(this.name + " stored " + crystal.getName() + " in slot " + (i + 1) + ".");
                 return true;
             }
         }
-            System.out.println(this.name + "'s potion belt is full! (Max " + MAX_CRYSTALS + " items.crystals)");
-            return false;
-
+        System.out.println(this.name + "'s potion belt is full! (Max " + MAX_CRYSTALS + " crystals)");
+        return false;
     }
 
-    public void useCrystral(int slotIndex) {
+    public void useCrystal(int slotIndex) {
         if (!this.canAttack) {
-            System.out.println(this.name + " cannot use items.crystals this turn!");
+            System.out.println(this.name + " cannot use crystals this turn!");
             return;
         }
         if (slotIndex < 0 || slotIndex >= this.crystals.length || this.crystals[slotIndex] == null) {
@@ -156,37 +152,41 @@ public class GameCharacter {
         }
     }
 
-    public void modifyBaseDamage(int amount) { this.baseDamage = Math.max(0, this.baseDamage + amount); }
+    public void modifyBaseDamage(int amount) {
+        this.baseDamage = Math.max(0, this.baseDamage + amount);
+    }
 
-    public boolean isAlive(){
+    public boolean isAlive() {
         return this.currentHealth > 0;
     }
 
+    public String getName() { return this.name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName(){return this.name;}
-    public void setName(String name){this.name = name;}
+    public int getCurrentHealth() { return this.currentHealth; }
+    public void setCurrentHealth(int currentHealth) {
+        this.currentHealth = Math.max(0, Math.min(this.maxHealth, currentHealth));
+    }
 
-    public int getCurrentHealth(){return this.currentHealth;}
-    public void setCurrentHealth(int currentHealth){this.currentHealth = currentHealth;}
+    public int getBaseDamage() { return this.baseDamage; }
+    public void setBaseDamage(int baseDamage) { this.baseDamage = baseDamage; }
 
-    public int getBaseDamage(){return this.baseDamage;}
-    public void setBaseDamage(int baseDamage){this.baseDamage = baseDamage;}
+    public void setArmour(int armour) { this.armour = armour; }
+    public int getArmour() { return this.armour; }
 
-    public void setArmour(int armour){this.armour = armour;}
-    public int getArmour(){return this.armour;}
+    public void setCanAttack(boolean canAttack) { this.canAttack = canAttack; }
+    public boolean getCanAttack() { return this.canAttack; }
 
-    public void setCanAttack(boolean canAttack){this.canAttack = canAttack;}
-    public boolean getCanAttack(){return this.canAttack;}
+    public Effect getCurrentEffect() {
+        return this.activeEffects.isEmpty() ? null : this.activeEffects.get(0);
+    }
 
-    public Effect getCurrentEffect(){return this.getCurrentEffect();}
-
-    public Weapon getEquippedWeapon(){return this.equippedWeapon;}
+    public Weapon getEquippedWeapon() { return this.equippedWeapon; }
 
     @Override
     public String toString() {
         String weaponName = (this.equippedWeapon != null) ? this.equippedWeapon.getName() : "None";
-            return "Name:" + this.name + "\t Life:" + this.currentHealth + "/" + this.maxHealth + "HP" + "\t Damage:" +
-                    this.baseDamage + "\tWeapon:" + weaponName ;
+        return "Name: " + this.name + "\tLife: " + this.currentHealth + "/" + this.maxHealth + " HP" +
+                "\tDamage: " + this.baseDamage + "\tWeapon: " + weaponName;
     }
 }
-
