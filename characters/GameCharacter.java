@@ -1,8 +1,8 @@
 package characters;
 
 import effect.Effect;
-import weapon.Weapon;
-import crystals.Crystal;
+import items.weapon.Weapon;
+import items.crystals.Crystal;
 
 import java.util.List;
 
@@ -56,7 +56,8 @@ public class GameCharacter {
 
     public void takeDamage(int damageIncoming){
         System.out.println("Recives " + damageIncoming + "of damage" );
-        this.currentHealth = Math.max(0, this.currentHealth - damageIncoming);  //esto es para que si la vida baja de 0 se quede en 0 y no aparezca un numero negativo
+        this.currentHealth = (int)Math.round(Math.max(0, this.currentHealth - (damageIncoming * (this.armour / 100.0))));
+        //esto es para que si la vida baja de 0 se quede en 0 y no aparezca un numero negativo
     }
 
     public void applyEffect(Effect newEffect) {
@@ -113,14 +114,14 @@ public class GameCharacter {
                 return true;
             }
         }
-            System.out.println(this.name + "'s potion belt is full! (Max " + MAX_CRYSTALS + " crystals)");
+            System.out.println(this.name + "'s potion belt is full! (Max " + MAX_CRYSTALS + " items.crystals)");
             return false;
 
     }
 
     public void useCrystral(int slotIndex) {
         if (!this.canAttack) {
-            System.out.println(this.name + " cannot use crystals this turn!");
+            System.out.println(this.name + " cannot use items.crystals this turn!");
             return;
         }
         if (slotIndex < 0 || slotIndex >= this.crystals.length || this.crystals[slotIndex] == null) {
@@ -177,10 +178,9 @@ public class GameCharacter {
     public void setCanAttack(boolean canAttack){this.canAttack = canAttack;}
     public boolean getCanAttack(){return this.canAttack;}
 
-    public
+    public Effect getCurrentEffect(){return this.getCurrentEffect();}
 
-    public Weapon getWeapon(){return this.equippedWeapon;}
-
+    public Weapon getEquippedWeapon(){return this.equippedWeapon;}
 
     @Override
     public String toString() {

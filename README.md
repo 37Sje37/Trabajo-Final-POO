@@ -20,3 +20,39 @@ como se juega
 
 
 que hemos hecho cada uno
+
+--- BÁSICOS ---
+BLACK
+RED
+GREEN
+YELLOW
+BLUE
+PURPLE
+CYAN
+WHITE
+
+--- BRILLANTES ---
+GRAY
+BRIGHT_RED
+BRIGHT_GREEN
+BRIGHT_YELLOW
+BRIGHT_BLUE
+BRIGHT_PURPLE
+BRIGHT_CYAN
+BRIGHT_WHITE
+
+--- EXTENDIDOS ---
+ORANGE
+GOLD
+PINK
+MAGENTA
+TURQUOISE
+LIME
+VIOLET
+BROWN
+
+Colores:
+
+Nombre: Purple
+Base Damage: RED
+Snipper Amo: Yellow

@@ -1,44 +1,64 @@
 import characters.GameCharacter;
 import items.Chest;
-import weapon.Weapon;
-import weapon.sniper.*;
-import weapon.staff.*;
-import weapon.sword.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import items.ItemCatalog;
+import items.crystals.PowerCrystal;
+import items.weapon.sniper.L115A3;
+import items.weapon.staff.SilveryEternity;
+import items.weapon.sword.Elucidator;
+import ornaments.Colors;
 
 public class Main {
     public static void main(String[] args) {
-        // 1. Crear el catálogo con tus 9 armas concretas
-        List<Weapon> weaponPool = new ArrayList<>();
 
-        weaponPool.add(new AMRTiamat());
-        weaponPool.add(new HecateII());
-        weaponPool.add(new L115A3());
+        //ItemCatalog.printDefaultCatalog();
 
-        weaponPool.add(new AbyssalStaff());
-        weaponPool.add(new SalamanderStaff());
-        weaponPool.add(new SilveryEternity());
+        Elucidator elucidator = new Elucidator(3);
+        System.out.println(elucidator);
 
-        weaponPool.add(new AnnealBlade((int)(0.5 + (Math.random() * 0.5))));
-        weaponPool.add(new Elucidator((int)(0.5 + (Math.random() * 0.5))));
-        weaponPool.add(new LambentLight((int)(0.5 + (Math.random() * 0.5))));
+        SilveryEternity silveryEternity = new SilveryEternity();
+        System.out.println(silveryEternity);
 
-        // 2. Crear un personaje de prueba
-        GameCharacter usuario = new GameCharacter("Kirito", 250, 20,4);
+        L115A3 l115A3 = new L115A3();
+        System.out.println(l115A3);
 
-        // 3. Crear y abrir el cofre
-        Chest chest = new Chest(weaponPool);
-        chest.open(usuario);
+        PowerCrystal powerCrystal = new PowerCrystal();
+        System.out.println(powerCrystal);
 
-        // 4. Comprobar lo que ha recibido el personaje
-        System.out.println("\n--- ESTADO TRAS ABRIR EL COFRE ---");
-        System.out.println("Arma equipada: " + usuario.getWeapon());
-        usuario.showCrystals();
+ /*
+        Colors color = new Colors();
 
-        // 5. Intentar abrirlo otra vez (debería avisar de que ya está vacío)
+        System.out.println(color);
+
+        ItemCatalog.printAllItems();
+
+
+        // 1. Crear un personaje de prueba
+        GameCharacter kirito = new GameCharacter("Kirito", 250, 20,30);
+
+        // 2. Crear y abrir el primer cofre (ya lleva todas las armas y cristales dentro)
+        Chest chest1 = new Chest();
+        chest1.open(kirito);
+
+        // 3. Comprobar lo que ha recibido el personaje
+        System.out.println("\n--- ESTADO TRAS ABRIR EL COFRE 1 ---");
+        System.out.println("Arma equipada: " + kirito.getEquippedWeapon());
+        kirito.showCrystals();
+
+        // 4. Intentar abrirlo otra vez (debería avisar de que ya está vacío)
         System.out.println();
-        chest.open(usuario);
+        chest1.open(kirito);
+
+        // 5. Abrir un segundo cofre para probar que saca otro botín aleatorio
+        System.out.println();
+        Chest chest2 = new Chest();
+        chest2.open(kirito);
+
+        System.out.println("\n--- ESTADO TRAS ABRIR EL COFRE 2 ---");
+        System.out.println("Arma equipada: " + kirito.getEquippedWeapon());
+        kirito.showCrystals();
+
+*/
+
+
     }
 }

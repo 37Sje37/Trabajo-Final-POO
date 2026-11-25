@@ -27,7 +27,7 @@ public class Drain extends Effect{
                 this.caster.heal(healAmount);
             }
             this.remainingTurns = 0;
-            this.caster.setCurrentEffect(null);
+            this.caster.applyEffect(null);
         }
     }
 

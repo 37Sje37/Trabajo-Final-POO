@@ -1,0 +1,45 @@
+package items.weapon.sword;
+
+import items.weapon.Weapon;
+import ornaments.Colors;
+
+public class Sword extends Weapon {
+
+    public static final int MAXSHARPNESS = 100;
+
+    int sharpness;
+
+    public Sword(String name, int baseDamage, int sharpness){
+        super(name, baseDamage);
+        this.sharpness = sharpness;
+    }
+
+    public void decreaseSharpness(int amount){
+        this.sharpness = Math.max(0, this.sharpness - amount);
+    }
+
+    public void sharpen(int amount) {
+        this.sharpness = Math.min(100, this.sharpness + amount);
+        System.out.println(this.name + " sharpened! Current sharpness: " + this.sharpness + "/100");  //Afilar la espada
+    }
+
+    public int getSharpness(){
+        return this.sharpness;
+    }
+
+    protected double getSharpnessRatio() {return this.sharpness / 100.0;}
+
+    @Override
+    public int getDamage(){
+        return (this.sharpness < 30) ? (int) (this.baseDamage * 0.8) : this.baseDamage;
+        // si la espada baja de un 30 de sharpness hace menos daño
+    }
+
+    @Override
+    public String toString() {
+        return Colors.GRAY + "Name: " + Colors.CYAN + this.name +
+                Colors.GRAY + "\tDamage: " + Colors.RED + this.baseDamage +
+                Colors.GRAY + "\tSharpness: " + Colors.YELLOW + this.sharpness + "/100" + Colors.RESET;
+    }
+
+}

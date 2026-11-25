@@ -1,17 +1,17 @@
 package items;
 
 import characters.GameCharacter;
-import crystals.*;
-import weapon.Weapon;
-import java.util.List;
+import items.crystals.*;
+import items.weapon.Weapon;
+import items.weapon.sniper.*;
+import items.weapon.staff.*;
+import items.weapon.sword.*;
 
 public class Chest {
     private boolean opened;
-    private final List<Weapon> weaponPool; // Todas las armas que pueden tocar
 
-    public Chest(List<Weapon> weaponPool) {
+    public Chest() {
         this.opened = false;
-        this.weaponPool = weaponPool;
     }
 
     public void open(GameCharacter player) {
@@ -27,32 +27,41 @@ public class Chest {
 
         System.out.println(player.getName() + " opens a Treasure Chest and finds:");
         System.out.println("  - Crystal: " + rewardCrystal.getName());
-        player.addCrystal(rewardCrystal);
+        System.out.println("  - Weapon: " + rewardWeapon.getName());
 
-        if (rewardWeapon != null) {
-            System.out.println("  - Weapon: " + rewardWeapon.getName());
-            player.equipWeapon(rewardWeapon);
-        }
+        player.addCrystal(rewardCrystal);
+        player.equipWeapon(rewardWeapon);
     }
 
     private Weapon generateRandomWeapon() {
-        if (this.weaponPool == null || this.weaponPool.isEmpty()) {
-            return null;
-        }
-        int randomIndex = (int) (Math.random() * this.weaponPool.size());
-        return this.weaponPool.get(randomIndex);
+        Weapon[] weapons = {
+                new AMRTiamat(),
+                new HecateII(),
+                new L115A3(),
+                new AbyssalStaff(),
+                new SalamanderStaff(),
+                new SilveryEternity(),
+                new AnnealBlade((int)((0.5 + (Math.random() * 0.5))*100)),
+                new Elucidator((int)((0.5 + (Math.random() * 0.5))*100)),
+                new LambentLight((int)((0.5 + (Math.random() * 0.5))*100))
+        };
+
+        int randomIndex = (int) (Math.random() * weapons.length);
+        return weapons[randomIndex];
     }
 
     private Crystal generateRandomCrystal() {
-        int roll = (int) (Math.random() * 6);
-        switch (roll) {
-            case 0: return new HealingCrystal();
-            case 1: return new WeaponCrystal();
-            case 2: return new PowerCrystal();
-            case 3: return new CoffeeCrystal();
-            case 4: return new BandageCrystal();
-            default: return new FrostCrystal();
-        }
+        Crystal[] crystals = {
+                new HealingCrystal(),
+                new WeaponCrystal(),
+                new PowerCrystal(),
+                new CoffeeCrystal(),
+                new BandageCrystal(),
+                new FrostCrystal()
+        };
+
+        int randomIndex = (int) (Math.random() * crystals.length);
+        return crystals[randomIndex];
     }
 
     public boolean isOpened() {
