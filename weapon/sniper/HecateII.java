@@ -1,7 +1,7 @@
 package weapon.sniper;
 
 import characters.GameCharacter;
-import effects.Bleed;
+import effect.Bleed;
 
 public class HecateII extends SniperRifle{
 

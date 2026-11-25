@@ -1,17 +1,17 @@
 package crystals;
 
 import characters.GameCharacter;
-import effects.AttackBoost;
+import effect.AttackBoost;
 
 public class PowerCrystal extends Crystal {
 
     private final double boostPercentage;
     private final int durationTurns;
 
-    public PowerCrystal(double boostPercentage, int durationTurns){
+    public PowerCrystal(){
         super("Power Crystal");
-        this.boostPercentage =boostPercentage;
-        this.durationTurns = durationTurns;
+        this.boostPercentage =0.25;
+        this.durationTurns = 2;
     }
 
     @Override

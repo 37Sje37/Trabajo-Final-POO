@@ -1,13 +1,12 @@
 package characters;
 
-import effects.Effect;
+import effect.Effect;
 import weapon.Weapon;
 import crystals.Crystal;
 
 import java.util.List;
-import javax.swing.text.html.HTMLDocument.Iterator;
 
-public abstract class GameCharacter {
+public class GameCharacter {
 
     private static final int MAX_CRYSTALS = 2;
 
@@ -145,6 +144,17 @@ public abstract class GameCharacter {
         return removed;
     }
 
+    public void showCrystals() {
+        System.out.println(this.name + "'s Crystals:");
+        for (int i = 0; i < this.crystals.length; i++) {
+            if (this.crystals[i] != null) {
+                System.out.println("  Slot " + (i + 1) + ": " + this.crystals[i].toString());
+            } else {
+                System.out.println("  Slot " + (i + 1) + ": [Empty]");
+            }
+        }
+    }
+
     public void modifyBaseDamage(int amount) { this.baseDamage = Math.max(0, this.baseDamage + amount); }
 
     public boolean isAlive(){
@@ -166,6 +176,8 @@ public abstract class GameCharacter {
 
     public void setCanAttack(boolean canAttack){this.canAttack = canAttack;}
     public boolean getCanAttack(){return this.canAttack;}
+
+    public
 
     public Weapon getWeapon(){return this.equippedWeapon;}
 

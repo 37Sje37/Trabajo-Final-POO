@@ -1,7 +1,7 @@
 package weapon.staff;
 
 import characters.GameCharacter;
-import effects.Paralysis;
+import effect.Paralysis;
 
 public class SilveryEternity extends Staff{
 

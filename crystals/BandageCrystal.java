@@ -1,10 +1,7 @@
 package crystals;
 
 import characters.GameCharacter;
-import effects.Bleed;
-import effects.Effect;
-
-import java.util.List;
+import effect.Bleed;
 
 public class BandageCrystal extends Crystal{
 

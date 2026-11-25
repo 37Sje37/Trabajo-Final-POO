@@ -1,7 +1,7 @@
 package weapon.staff;
 
 import characters.GameCharacter;
-import effects.Drain;
+import effect.Drain;
 
 
 public class AbyssalStaff extends Staff{

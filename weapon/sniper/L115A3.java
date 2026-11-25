@@ -1,7 +1,7 @@
 package weapon.sniper;
 
 import characters.GameCharacter;
-import effects.Paralysis;
+import effect.Paralysis;
 
 public class L115A3 extends SniperRifle{
 

@@ -1,6 +1,6 @@
 package weapon.sword;
 
-import effects.Bleed;
+import effect.Bleed;
 import characters.GameCharacter;
 
 public class AnnealBlade extends Sword{

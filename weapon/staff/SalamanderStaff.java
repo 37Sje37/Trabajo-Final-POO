@@ -1,7 +1,7 @@
 package weapon.staff;
 
 import characters.GameCharacter;
-import effects.Burn;
+import effect.Burn;
 
 public class SalamanderStaff extends Staff{
 
