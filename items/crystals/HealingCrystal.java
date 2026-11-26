@@ -27,7 +27,7 @@ public class HealingCrystal extends Crystal {
         }
 
         int heal = getHealAmount();
-        target.setCurrentHealth(target.getCurrentHealth() + heal);
+        target.heal(heal);
         this.shattered = true;
 
         System.out.println(target.getName() + " uses a " + this.name + " (Lv." + this.level +
