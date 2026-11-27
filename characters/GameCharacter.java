@@ -16,21 +16,62 @@ public class GameCharacter {
     protected int maxHealth;
     protected int baseDamage;
     protected int armour;
+    protected int level;
+    protected int xp;
+    protected int xpToNextLevel;
     protected boolean canAttack;
     protected Weapon equippedWeapon;
     private List<Effect> activeEffects;
     private Crystal[] crystals;
 
-    public GameCharacter(String name, int currentHealth, int damage, int armour) {
+    // Constructor original (por defecto empieza en nivel 1)
+    public GameCharacter(String name, int maxHealth, int damage, int armour) {
+        this(name, maxHealth, damage, armour, 1);
+    }
+
+    // Constructor sobrecargado con nivel inicial
+    public GameCharacter(String name, int maxHealth, int damage, int armour, int level) {
         this.name = name;
-        this.currentHealth = currentHealth;
-        this.maxHealth = currentHealth;
+        this.maxHealth = maxHealth;
+        this.currentHealth = maxHealth;
         this.baseDamage = damage;
         this.armour = armour;
+        this.level = Math.max(1, level);
+        this.xp = 0;
+        this.xpToNextLevel = calculateXpForNextLevel(this.level);
         this.canAttack = true;
         this.equippedWeapon = null;
         this.activeEffects = new ArrayList<>();
         this.crystals = new Crystal[MAX_CRYSTALS];
+    }
+
+    private int calculateXpForNextLevel(int currentLevel) {
+        return 100 * currentLevel;
+    }
+
+    public void gainXp(int amount) {
+        if (amount <= 0) return;
+        this.xp += amount;
+        System.out.println(this.name + " gains " + amount + " XP! (" + this.xp + "/" + this.xpToNextLevel + ")");
+
+        while (this.xp >= this.xpToNextLevel) {
+            this.xp -= this.xpToNextLevel;
+            levelUp();
+        }
+    }
+
+    protected void levelUp() {
+        this.level++;
+        this.xpToNextLevel = calculateXpForNextLevel(this.level);
+
+        // Escalado de +15% por nivel en vida y daño, y +2 en armadura
+        this.maxHealth = (int) Math.round(this.maxHealth * 1.15);
+        this.currentHealth = this.maxHealth; // Restaura vida al subir de nivel
+        this.baseDamage = (int) Math.round(this.baseDamage * 1.15);
+        this.armour = Math.min(80, this.armour + 2);
+
+        System.out.println("LEVEL UP! " + this.name + " reached Level " + this.level + "!");
+        System.out.println("  -> Max HP: " + this.maxHealth + " | Base ATK: " + this.baseDamage + " | Armour: " + this.armour + "%");
     }
 
     public void attack(GameCharacter target) {
@@ -168,11 +209,17 @@ public class GameCharacter {
         this.currentHealth = Math.max(0, Math.min(this.maxHealth, currentHealth));
     }
 
+    public int getMaxHealth() { return this.maxHealth; }
+
     public int getBaseDamage() { return this.baseDamage; }
     public void setBaseDamage(int baseDamage) { this.baseDamage = baseDamage; }
 
     public void setArmour(int armour) { this.armour = armour; }
     public int getArmour() { return this.armour; }
+
+    public int getLevel() { return this.level; }
+    public int getXp() { return this.xp; }
+    public int getXpToNextLevel() { return this.xpToNextLevel; }
 
     public void setCanAttack(boolean canAttack) { this.canAttack = canAttack; }
     public boolean getCanAttack() { return this.canAttack; }
@@ -186,7 +233,8 @@ public class GameCharacter {
     @Override
     public String toString() {
         String weaponName = (this.equippedWeapon != null) ? this.equippedWeapon.getName() : "None";
-        return "Name: " + this.name + "\tLife: " + this.currentHealth + "/" + this.maxHealth + " HP" +
-                "\tDamage: " + this.baseDamage + "\tWeapon: " + weaponName;
+        return "Lv." + this.level + " " + this.name + "\tLife: " + this.currentHealth + "/" + this.maxHealth + " HP" +
+                "\tDamage: " + this.baseDamage + "\tWeapon: " + weaponName +
+                "\tXP: " + this.xp + "/" + this.xpToNextLevel;
     }
 }

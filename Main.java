@@ -1,62 +1,111 @@
 import characters.GameCharacter;
-import items.Chest;
-import items.ItemCatalog;
-import items.crystals.Crystal;
-import items.crystals.HealingCrystal;
-import items.crystals.PowerCrystal;
-import items.crystals.WeaponCrystal;
-import items.weapon.Weapon;
-import items.weapon.sniper.L115A3;
-import items.weapon.staff.SalamanderStaff;
-import items.weapon.staff.SilveryEternity;
-import items.weapon.sword.Elucidator;
-import ornaments.Colors;
+import characters.enemies.Enemy;
+import characters.enemies.factory.EnemyFactory;
+import characters.enemies.Enemy;
+import characters.enemies.factory.EnemyFactory;
+import java.util.List;
+
+
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
+    public static void pause(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
     public static void main(String[] args) {
-        System.out.println("=== 1. VERIFICAR TOSTRING (SIN GASTAR RECURSOS) ===");
-        Weapon sword = new Elucidator(50, 1);
-        SalamanderStaff staff = new SalamanderStaff(1);
-        L115A3 sniper = new L115A3(1);
+        Scanner scanner = new Scanner(System.in);
 
-        System.out.println(sword);
-        System.out.println(staff);
-        System.out.println(sniper); // Debe seguir en 11/11 balas y sin imprimir critico
+        // 1. Creamos al jugador (revisa que currentHealth se inicialice en GameCharacter)
+        GameCharacter player = new GameCharacter("Kirito", 250, 28, 12) {
+        };
 
-        System.out.println("\n=== 2. VERIFICAR ESCALADO AL SUBIR DE NIVEL ===");
-        sword.levelUp();
-        staff.levelUp();
-        sniper.levelUp();
+        // 2. Elegimos el mundo y la fase (1-1: Tanques + Retaguardia; pon stage = 3 para Illfang)
+        int world = 1;
+        int stage = 1;
 
-        System.out.println("Tras subir a Lv.2:");
-        System.out.println(sword);
-        System.out.println(staff);
-        System.out.println(sniper); // Debe pasar a 12/12 balas y subir probabilidades
+        EnemyFactory factory = EnemyFactory.getFactoryForWorld(world);
+        List<Enemy> enemies = factory.createStageEncounter(world, stage);
 
-        System.out.println("\n=== 3. VERIFICAR COMBATE Y EFECTOS ===");
-        // Ajusta los parametros del constructor de GameCharacter si tu clase pide mas o menos datos
-        GameCharacter hero = new GameCharacter("Kirito", 200, 15, 10);
-        GameCharacter dummy = new GameCharacter("Training Dummy", 500, 10, 5);
+        System.out.println("=== COMIENZA EL COMBATE: PISO " + world + "-" + stage + " ===");
+        pause(1000);
+        int turn = 1;
 
-        hero.equipWeapon(sniper);
-        hero.attack(dummy); // Debe gastar 1 bala (11/12) y hacer dano
-        System.out.println("Estado del sniper tras 1 disparo: " + sniper);
+        // 3. Bucle de combate
+        while (player.isAlive() && enemies.stream().anyMatch(Enemy::isAlive)) {
+            System.out.println("\n--- TURNO " + turn + " ---");
+            pause(600);
 
-        hero.equipWeapon(staff);
-        ((SalamanderStaff) staff).castSpellEffect(hero, dummy); // Debe gastar mana y aplicar Burn
-        System.out.println("Estado del baston tras hechizo: " + staff);
+            System.out.println("JUGADOR: " + player);
+            pause(600);
 
-        System.out.println("\n=== 4. VERIFICAR CRISTALES ===");
-        Crystal healCrystal = new HealingCrystal(2);
-        Crystal weaponCrystal = new WeaponCrystal(3);
+            System.out.println("ENEMIGOS:");
+            for (int i = 0; i < enemies.size(); i++) {
+                Enemy e = enemies.get(i);
+                String estado = e.isAlive() ? e.toString() : "[DERROTADO] " + e.getName();
+                System.out.println("  [" + i + "] " + estado);
+                pause(400);
+            }
 
-        hero.takeDamage(60);
-        System.out.println("Vida antes de cristal: " + hero.getCurrentHealth());
-        healCrystal.activate(hero);
-        System.out.println("Vida tras HealingCrystal Lv.2: " + hero.getCurrentHealth());
+            // --- TURNO DEL JUGADOR ---
+            System.out.print("\nElige el número del enemigo al que quieres atacar: ");
+            int targetIndex = -1;
+            try {
+                targetIndex = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException ex) {
+                System.out.println("Entrada no válida. Pierdes el turno por dudar.");
+                pause(800);
+            }
 
-        hero.equipWeapon(sniper); // Tiene 11/12 balas y Lv.2
-        weaponCrystal.activate(hero); // Recarga a 12/12 y lo sube a Lv.3 (13/13)
-        System.out.println("Sniper tras WeaponCrystal Lv.3: " + sniper);
+            if (targetIndex >= 0 && targetIndex < enemies.size() && enemies.get(targetIndex).isAlive()) {
+                Enemy target = enemies.get(targetIndex);
+                player.attack(target);
+                pause(900);
+
+                if (!target.isAlive()) {
+                    System.out.println("¡Has derrotado a " + target.getName() + "!");
+                    pause(900);
+                }
+            } else if (targetIndex != -1) {
+                System.out.println("Objetivo no válido o ya derrotado.");
+                pause(800);
+            }
+
+            // --- TURNO DE LOS ENEMIGOS ---
+            if (enemies.stream().anyMatch(Enemy::isAlive)) {
+                System.out.println("\nTurno de los enemigos...");
+                pause(800);
+
+                for (Enemy enemy : enemies) {
+                    if (enemy.isAlive() && player.isAlive()) {
+                        enemy.takeTurn(player);
+                        pause(1000);
+                    }
+                }
+            }
+
+            turn++;
+        }
+
+        // 4. Resultado final de la fase
+        pause(1000);
+        System.out.println("\n=== FIN DEL COMBATE ===");
+        pause(1200);
+
+        if (player.isAlive()) {
+            int totalXp = enemies.stream().mapToInt(Enemy::getXpReward).sum();
+            System.out.println("¡VICTORIA! Has superado el nivel " + world + "-" + stage + ".");
+            pause(700);
+            System.out.println("Experiencia total obtenida: +" + totalXp + " XP");
+        } else {
+            System.out.println("GAME OVER. Has caído en Aincrad...");
+        }
+
+        scanner.close();
     }
 }
