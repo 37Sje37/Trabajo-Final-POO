@@ -9,10 +9,13 @@ import items.weapon.Weapon;
 import items.weapon.sniper.AMRTiamat;
 import items.weapon.sniper.HecateII;
 import items.weapon.sniper.L115A3;
+import items.weapon.sniper.RustedRifle;
 import items.weapon.staff.AbyssalStaff;
+import items.weapon.staff.OakStaff;
 import items.weapon.staff.SalamanderStaff;
 import items.weapon.staff.SilveryEternity;
 import items.weapon.sword.AnnealBlade;
+import items.weapon.sword.BronzeSword;
 import items.weapon.sword.Elucidator;
 import items.weapon.sword.LambentLight;
 import ornaments.Colors;
@@ -38,6 +41,10 @@ public class ItemCatalog {
         ItemCatalog catalog = new ItemCatalog();
 
         // --- ARMAS (Snipers, Staffs, Swords) ---
+        catalog.addItem(new BronzeSword());
+        catalog.addItem(new OakStaff());
+        catalog.addItem(new RustedRifle());
+
         catalog.addItem(new AMRTiamat(1));
         catalog.addItem(new HecateII(1));
         catalog.addItem(new L115A3(1));
@@ -100,7 +107,6 @@ public class ItemCatalog {
 
         for (int i = 0; i < columns.length; i++) {
             int width = (i < colWidths.length) ? colWidths[i] : 22;
-            // Usamos replaceAll("^ +| +$", "") en lugar de .trim() para NO borrar el \u001B del color inicial
             String cleanCol = columns[i].replaceAll("^ +| +$", "");
             row.append(padRightAnsi(cleanCol, width));
             if (i < columns.length - 1) {
