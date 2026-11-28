@@ -29,7 +29,6 @@ public class GameCharacter {
         this(name, maxHealth, damage, armour, 1);
     }
 
-    // Constructor sobrecargado con nivel inicial
     public GameCharacter(String name, int maxHealth, int damage, int armour, int level) {
         this.name = name;
         this.maxHealth = maxHealth;
@@ -210,6 +209,7 @@ public class GameCharacter {
     }
 
     public int getMaxHealth() { return this.maxHealth; }
+    public void setMaxHealth(int maxHealth){this.maxHealth = maxHealth;}
 
     public int getBaseDamage() { return this.baseDamage; }
     public void setBaseDamage(int baseDamage) { this.baseDamage = baseDamage; }

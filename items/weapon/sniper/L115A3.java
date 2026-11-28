@@ -35,7 +35,7 @@ public class L115A3 extends SniperRifle {
     public int getDamage() {
         int damage = super.getDamage();
         if (damage == 0) {
-            return 0; // Estaba sin balas y acaba de recargar en super.getDamage()
+            return 0; // Estaba sin balas
         }
 
         if (Math.random() < this.critProbability) {

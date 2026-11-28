@@ -12,5 +12,6 @@ public class Paralysis extends Effect{
      @Override
         public void applyEffect(GameCharacter target) {
          target.setCanAttack(false);
+         this.decreaseTurn();
      }
 }
